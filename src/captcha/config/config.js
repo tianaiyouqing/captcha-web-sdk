@@ -1,7 +1,4 @@
 import $ from "jquery";
-// import CryptoJS from 'crypto-js'
-// import JSEncrypt from "jsencrypt";
-
 class CaptchaConfig {
     constructor(args) {
         if (!args.bindEl) {
