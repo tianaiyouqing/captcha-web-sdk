@@ -74,10 +74,7 @@ module.exports = {
     devServer: {
         // 开发时可直接访问到 ./public 下的静态资源，这些资源在开发中不必打包
         port: 3000,
-        static: "./dist",
-        allowedHosts: [
-            "frpc.tianai.cloud"
-        ]
+        static: "./dist"
     }
 
 }

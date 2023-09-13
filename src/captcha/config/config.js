@@ -171,59 +171,7 @@ function wrapStyle(style) {
     return style;
 }
 
-const captchaRequestChains = {
-    "rsaaes": {
-        preRequest(type, param, c, tac) {
-            if (type !== "validCaptcha") {
-                // 只有验证上传数据时才进行aes加密
-                return true;
-            }
-            // 随机生成aes的key和iv
-            const key = CryptoJS.lib.WordArray.random(16);
-            const iv = CryptoJS.lib.WordArray.random(16);
-            // 对param.data进行aes加密
-            const data = CryptoJS.AES.encrypt(param.data, key, {
-                iv: iv,
-                padding: CryptoJS.pad.NoPadding,
-                mode: CryptoJS.mode.CTR
-            });
-            param.data = data.ciphertext;
-            const keyAndIv = key.toString() + "|" + iv.toString();
-            const rsaPublicKey = window.TAC.enc.rsaPublicKey;
-            if (!rsaPublicKey) {
-                throw new Error("请配置rsa公钥");
-            }
-            // 使用公钥rsaPublicKey对keyAndIv进行加密
-            const jsEncrypt = new JSEncrypt();
-            jsEncrypt.setPublicKey(rsaPublicKey);
-            param.ki = jsEncrypt.encrypt(keyAndIv);
-
-            return true;
-        },
-        postRequest(type, param, c, tac) {
-            return true;
-        }
-    },
-    "base64": {
-        preRequest(type, param, c, tac) {
-            if (type !== "validCaptcha") {
-                // 只有验证上传数据时才进行aes加密
-                return true;
-            }
-            // 对param.data使用CryptoJS进行base64加密
-            if (param.data) {
-                param.data = CryptoJS.enc.Base64.stringify(param.data);
-            }
-            return true;
-        }
-    },
-    "json": {
-        preRequest(type, param, c, tac) {
-            param.data = JSON.stringify(param.data);
-            return true;
-        }
-    }
-}
+const captchaRequestChains = {}
 
 
 export {CaptchaConfig, wrapConfig, wrapStyle}
