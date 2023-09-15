@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --open",
-    "build": "webpack",
-    "buildprod": "webpack --mode production --progress",
-    "buildprod2": "webpack --mode production"
+    "start": "webpack serve --open --mode development",
+    "build": "webpack --mode development",
+    "buildprod": "webpack --mode production --progress"
+
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
     "css-loader": "^6.8.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.3",
+    "javascript-obfuscator": "^4.1.0",
     "mini-css-extract-plugin": "^2.7.6",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.3",

@@ -1,23 +1,18 @@
 const webpack = require('webpack')
+const {merge} = require("webpack-merge")
+const devConfig = require("./webpack.config.dev")
+const prodConfig = require("./webpack.config.prod")
 const path = require("path");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //抽离CSS为独立文件的插件
-const HtmlWebpackPlugin = require('html-webpack-plugin'); // 打包html，自动引入css和js文件
-const {CleanWebpackPlugin} = require('clean-webpack-plugin') // 打包清理插件
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 
-module.exports = {
+const commonConfig = {
     mode: 'development',
-    // mode: 'production',
     entry: "./src/index.js",
     output: {
         filename: "tac.js",
         path: path.resolve(__dirname, "./dist")
     },
-    externals: {
-        jquery: 'jQuery'
-
-    },
-
     resolve: {
         alias: {
             "@": path.join(__dirname, "./src") // 这样@符号就表示项目根目录中src这一层路径
@@ -28,7 +23,6 @@ module.exports = {
             {
                 test: /\.(css)$/,
                 use: [MiniCssExtractPlugin.loader, 'css-loader'],
-                // use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.s[ac]ss$/,
@@ -58,17 +52,11 @@ module.exports = {
         ]
     },
     plugins: [
-        // new BundleAnalyzerPlugin(),
         new MiniCssExtractPlugin({
             // 指定抽离的之后形成的文件名
-            // filename: 'styles/[name]_[contenthash:8].css'
             filename: 'styles/tac.css'
         }),
         new webpack.HotModuleReplacementPlugin(),
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: './public/index.html'
-        }),
         new CleanWebpackPlugin()
     ],
     devServer: {
@@ -76,5 +64,15 @@ module.exports = {
         port: 3000,
         static: "./dist"
     }
-
 }
+
+module.exports = (env, argv) => {
+    if (argv && argv.mode === 'production') {
+        console.log("=============production==================")
+        return merge(commonConfig, prodConfig);
+    }else {
+        console.log("=============development==================")
+        return merge(commonConfig, devConfig);
+    }
+}
+
