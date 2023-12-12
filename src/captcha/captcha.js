@@ -38,6 +38,12 @@ function createCaptchaByType(type, styleConfig) {
 class TianAiCaptcha {
     constructor(config, style) {
         this.config = wrapConfig(config);
+        if (this.config.btnRefreshFun) {
+            this.btnRefreshFun = this.config.btnRefreshFun;
+        }
+        if (this.config.btnCloseFun) {
+            this.btnCloseFun = this.config.btnCloseFun;
+        }
         this.style = wrapStyle(style);
     }
 
@@ -46,17 +52,23 @@ class TianAiCaptcha {
         this.config.$bindEl.append(template);
         this.loadStyle();
         // 绑定按钮事件
-        this.config.$bindEl.find("#tianai-captcha-slider-refresh-btn").click(() => {
-            this.reloadCaptcha();
+        this.config.$bindEl.find("#tianai-captcha-slider-refresh-btn").click((el) => {
+            this.btnRefreshFun(el, this);
         });
-        this.config.$bindEl.find("#tianai-captcha-slider-close-btn").click(() => {
-            this.destroyWindow();
+        this.config.$bindEl.find("#tianai-captcha-slider-close-btn").click((el) => {
+            this.btnCloseFun(el, this);
         });
         // 加载验证码
         this.reloadCaptcha();
         return this;
     }
 
+    btnRefreshFun(el, tac) {
+        tac.reloadCaptcha();
+    }
+    btnCloseFun(el, tac) {
+        tac.destroyWindow();
+    }
     reloadCaptcha() {
         this.showLoading();
         this.destroyCaptcha(() => {

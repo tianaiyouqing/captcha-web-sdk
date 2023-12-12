@@ -20,7 +20,11 @@ class CaptchaConfig {
         if (args.validFail) {
             this.validFail = args.validFail;
         }
-
+        if (args.requestHeaders) {
+            this.requestHeaders = args.requestHeaders
+        }else {
+            this.requestHeaders = {}
+        }
         this.requestChain = [];
         this.addRequestChainByString(args.chainString);
     }
@@ -46,6 +50,8 @@ class CaptchaConfig {
 
     requestCaptchaData() {
         const requestParam = {}
+        requestParam.headers = this.requestHeaders;
+        requestParam.data = {};
         // 请求前装载参数
         this._preRequest("requestCaptchaData", requestParam);
         // 发送请求
@@ -70,7 +76,8 @@ class CaptchaConfig {
             $.ajax({
                 url: requestUrl,
                 type: "POST",
-                data: JSON.stringify(requestParam),
+                headers: requestParam.headers,
+                data: JSON.stringify(requestParam.data),
                 dataType: "json",
                 contentType:  "application/json;charset=UTF-8",
                 success: (data) => {
