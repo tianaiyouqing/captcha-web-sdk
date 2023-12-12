@@ -15,7 +15,7 @@ const template =
         </div>
         <!-- 底部 -->
         <div class="slider-bottom">
-            <img class="logo" id="tianai-captcha-logo" src="https://minio.tianai.cloud/public/static/captcha/images/logo.png" id="tianai-captcha-logo"></img>
+            <img class="logo" id="tianai-captcha-logo" src="data:image/png;base64,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" id="tianai-captcha-logo"></img>
             <div class="close-btn" id="tianai-captcha-slider-close-btn"></div>
             <div class="refresh-btn" id="tianai-captcha-slider-refresh-btn"></div>
         </div>
@@ -77,12 +77,14 @@ class TianAiCaptcha {
             // 背景图片
             this.config.$bindEl.find("#tianai-captcha-bg-img").css("background-image", "url(" + bgUrl + ")");
         }
-        if (logoUrl && logoUrl !== "") {
-            // logo
-            this.config.$bindEl.find("#tianai-captcha-logo").attr("src", logoUrl);
-        }else {
-            // 删除logo
-            this.config.$bindEl.find("#tianai-captcha-logo").attr("display", "none");
+        if (logoUrl ) {
+            if (logoUrl !== "") {
+                // logo
+                this.config.$bindEl.find("#tianai-captcha-logo").attr("src", logoUrl);
+            }else {
+                // 删除logo
+                this.config.$bindEl.find("#tianai-captcha-logo").css("display", "none");
+            }
         }
     }
 

@@ -16,11 +16,16 @@
     $(function () {
         // 样式配置
         const config = {
-            requestCaptchaDataUrl: "http://localhost:8080/gen",
+            requestCaptchaDataUrl: "http://localhost:8080/gen?type=WORD_IMAGE_CLICK",
             validCaptchaUrl: "http://localhost:8080/check",
             bindEl: "#captcha-box"
         }
-        new TAC(config).init();
+        const style = {
+            // logoUrl : null
+
+        }
+        const captcha = new TAC(config, style);
+        captcha.init();
     });
 
 </script>
