@@ -4,10 +4,6 @@ import Slider from "./slider/slider"
 import Rotate from "./rotate/rotate";
 import Concat from "./concat/concat";
 import WordImageClick from "./word_image_click/word_image_click";
-import WordOrderImageClick from "./word_order_image_click/word_order_image_click";
-import RotateDegree from "./rotate_degree/rotate_degree";
-import ImageClick from "./image_click/image_click";
-import Scrape from "./scrape/scrape";
 import {CaptchaConfig, wrapConfig, wrapStyle} from "./config/config";
 
 const template =
@@ -31,18 +27,10 @@ function createCaptchaByType(type, styleConfig) {
             return new Slider("#tianai-captcha-box", styleConfig);
         case "ROTATE":
             return new Rotate("#tianai-captcha-box", styleConfig);
-        case "ROTATE_DEGREE":
-            return new RotateDegree("#tianai-captcha-box", styleConfig);
         case "CONCAT":
             return new Concat("#tianai-captcha-box", styleConfig);
-        case "IMAGE_CLICK":
-            return new ImageClick("#tianai-captcha-box", styleConfig);
         case "WORD_IMAGE_CLICK":
             return new WordImageClick("#tianai-captcha-box", styleConfig);
-        case "WORD_ORDER_IMAGE_CLICK":
-            return new WordOrderImageClick("#tianai-captcha-box", styleConfig);
-        case "SCRAPE":
-            return new Scrape("#tianai-captcha-box", styleConfig);
         default:
             return null;
     }
@@ -89,9 +77,12 @@ class TianAiCaptcha {
             // 背景图片
             this.config.$bindEl.find("#tianai-captcha-bg-img").css("background-image", "url(" + bgUrl + ")");
         }
-        if (logoUrl) {
+        if (logoUrl && logoUrl !== "") {
             // logo
             this.config.$bindEl.find("#tianai-captcha-logo").attr("src", logoUrl);
+        }else {
+            // 删除logo
+            this.config.$bindEl.find("#tianai-captcha-logo").attr("display", "none");
         }
     }
 
@@ -142,7 +133,7 @@ class TianAiCaptcha {
         if (window.currentCaptcha) {
             window.currentCaptcha.el.css("transform", "translateX(300px)")
             setTimeout(() => {
-                window.currentCaptcha.destory();
+                window.currentCaptcha.destroy();
                 if (callback) {
                     callback();
                 }

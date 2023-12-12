@@ -1,7 +1,7 @@
 import "@/captcha/slider/slider.scss"
 import "./rotate.scss"
 import $ from "jquery"
-import {CommonCaptcha,clearAllPreventDefault, down, drawBgImage, initConfig} from "../common/common.js"
+import {CommonCaptcha, down, drawBgImage, initConfig, destroyEvent} from "../common/common.js"
 
 /**
  * 滑动验证码
@@ -44,14 +44,13 @@ class Rotate extends CommonCaptcha{
     }
     init(captchaData, endCallback, loadSuccessCallback) {
         // 重载样式
-        this.destory();
+        this.destroy();
         this.boxEl.append(template);
         this.el = $(this.boxEl.find("#tianai-captcha"));
         this.loadStyle();
         // 按钮绑定事件
         this.el.find("#tianai-captcha-slider-move-btn").mousedown(down);
         this.el.find("#tianai-captcha-slider-move-btn").on("touchstart", down);
-        clearAllPreventDefault(this.el);
         // 绑定全局
         window.currentCaptcha = this;
         // 载入验证码
@@ -64,11 +63,12 @@ class Rotate extends CommonCaptcha{
         return this;
     }
 
-    destory () {
+    destroy () {
         const existsCaptchaEl = this.boxEl.children("#tianai-captcha");
         if (existsCaptchaEl) {
             existsCaptchaEl.remove();
         }
+        destroyEvent();
     }
     doMove() {
         const moveX = this.currentCaptchaData.moveX;

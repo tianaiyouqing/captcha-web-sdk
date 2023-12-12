@@ -1,6 +1,6 @@
 import "./image_click.scss"
 import $ from "jquery"
-import {CommonCaptcha,clearAllPreventDefault, move, drawBgImage, initConfig} from "../common/common.js"
+import {CommonCaptcha,move, drawBgImage, initConfig, destroyEvent} from "../common/common.js"
 
 /**
  * 滑动验证码
@@ -34,10 +34,9 @@ class ImageClick extends CommonCaptcha{
     }
     init(captchaData, endCallback, loadSuccessCallback) {
         // 重载样式
-        this.destory();
+        this.destroy();
         this.boxEl.append(template);
         this.el = $(this.boxEl.find("#tianai-captcha"));
-        clearAllPreventDefault(this.el);
         // 绑定全局
         window.currentCaptcha = this;
         // 载入验证码
@@ -78,11 +77,12 @@ class ImageClick extends CommonCaptcha{
         }
         return this;
     }
-    destory () {
+    destroy () {
         const existsCaptchaEl = this.boxEl.children("#tianai-captcha");
         if (existsCaptchaEl) {
             existsCaptchaEl.remove();
         }
+        destroyEvent();
     }
     loadCaptchaForData (that, data) {
         const bgImg = that.el.find("#tianai-captcha-slider-bg-img");

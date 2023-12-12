@@ -3,12 +3,12 @@ import "./slider.scss"
 import $ from "jquery"
 import {
     CommonCaptcha,
-    clearAllPreventDefault,
     closeTips,
     down,
     drawBgImage,
     initConfig,
-    showTips
+    showTips,
+    destroyEvent
 } from "../common/common.js"
 
 /**
@@ -17,7 +17,7 @@ import {
 
 const TYPE = "SLIDER"
 const template =
-  `
+    `
 <div id="tianai-captcha" class="tianai-captcha-slider">
     <div class="slider-tip">
         <span id="tianai-captcha-slider-move-track-font">拖动滑块完成拼图</span>
@@ -53,14 +53,13 @@ class Slider extends CommonCaptcha{
     }
     init(captchaData, endCallback, loadSuccessCallback) {
         // 重载样式
-        this.destory();
+        this.destroy();
         this.boxEl.append(template);
         this.el = $(this.boxEl.find("#tianai-captcha"));
         this.loadStyle();
         // 按钮绑定事件
         this.el.find("#tianai-captcha-slider-move-btn").mousedown(down);
         this.el.find("#tianai-captcha-slider-move-btn").on("touchstart", down);
-        clearAllPreventDefault(this.el);
         // 绑定全局
         window.currentCaptcha = this;
         // 载入验证码
@@ -79,11 +78,12 @@ class Slider extends CommonCaptcha{
         closeTips(this.el, callback)
     }
 
-    destory () {
+    destroy () {
         const existsCaptchaEl = this.boxEl.children("#tianai-captcha");
         if (existsCaptchaEl) {
             existsCaptchaEl.remove();
         }
+        destroyEvent();
     }
     doMove() {
         const moveX = this.currentCaptchaData.moveX;

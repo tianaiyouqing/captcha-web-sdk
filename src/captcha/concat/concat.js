@@ -2,7 +2,7 @@ import "../common/common.scss"
 import "@/captcha/slider/slider.scss"
 import "./concat.scss"
 import $ from "jquery"
-import {CommonCaptcha, clearAllPreventDefault, down, initConfig} from "../common/common.js"
+import {CommonCaptcha, clearAllPreventDefault, down, initConfig, destroyEvent} from "../common/common.js"
 
 
 const TYPE  = "CONCAT";
@@ -39,7 +39,7 @@ class Concat extends CommonCaptcha{
     }
     init(captchaData, endCallback, loadSuccessCallback) {
         // 重载样式
-        this.destory();
+        this.destroy();
         this.boxEl.append(template);
         this.el = $(this.boxEl.find("#tianai-captcha"));
         this.loadStyle();
@@ -58,7 +58,8 @@ class Concat extends CommonCaptcha{
         }
         return this;
     }
-    destory () {
+    destroy () {
+        destroyEvent();
         const existsCaptchaEl = this.boxEl.children("#tianai-captcha");
         if (existsCaptchaEl) {
             existsCaptchaEl.remove();

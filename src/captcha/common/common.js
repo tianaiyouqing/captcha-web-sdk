@@ -24,13 +24,17 @@ function clearPreventDefault(event) {
  */
 function clearAllPreventDefault($div) {
     $div.each(function (index, el) {
+        // 手机端
         el.addEventListener('touchmove', clearPreventDefault, {passive: false});
+        // pc端
+        el.addEventListener('mousemove', clearPreventDefault, {passive: false});
     });
 }
 
 function reductionAllPreventDefault($div) {
     $div.each(function (index, el) {
         el.removeEventListener('touchmove', clearPreventDefault);
+        el.addEventListener('mousemove', clearPreventDefault);
     });
 }
 
@@ -203,11 +207,15 @@ function move(event) {
     printLog(["move", track])
 }
 
-function up(event) {
+function destroyEvent() {
     window.removeEventListener("mousemove", move);
     window.removeEventListener("mouseup", up);
     window.removeEventListener("touchmove", move);
     window.removeEventListener("touchend", up);
+}
+
+function up(event) {
+    destroyEvent();
     const coordinate = getCurrentCoordinate(event);
     currentCaptcha.currentCaptchaData.stopTime = new Date();
     let pageX = coordinate.x;
@@ -233,15 +241,16 @@ function up(event) {
 }
 
 function initConfig(bgImageWidth, bgImageHeight, sliderImageWidth, sliderImageHeight, end) {
+    // bugfix 图片宽高可能会有小数情况，强转一下整数
     const currentCaptchaConfig = {
         startTime: new Date(),
         trackArr: [],
         movePercent: 0,
         clickCount: 0,
-        bgImageWidth: bgImageWidth,
-        bgImageHeight: bgImageHeight,
-        sliderImageWidth: sliderImageWidth,
-        sliderImageHeight: sliderImageHeight,
+        bgImageWidth: Math.round(bgImageWidth),
+        bgImageHeight: Math.round(bgImageHeight),
+        sliderImageWidth: Math.round(sliderImageWidth),
+        sliderImageHeight: Math.round(sliderImageHeight),
         end: end
     }
     printLog(["init", currentCaptchaConfig]);
@@ -293,5 +302,6 @@ export {
     up,
     initConfig,
     showTips,
-    closeTips
+    closeTips,
+    destroyEvent
 }
